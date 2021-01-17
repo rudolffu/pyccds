@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+cat << "EOF"
+
+  _      __      __                        __
+ | | /| / /___  / /____ ___   __ _  ___   / /_ ___
+ | |/ |/ // -_)/ // __// _ \ /  ' \/ -_) / __// _ \
+ |__/|__/ \__//_/ \__/ \___//_/_/_/\__/  \__/ \___/
+   ___         _____ _____ ___   ____
+  / _ \ __ __ / ___// ___// _ \ / __/
+ / ___// // // /__ / /__ / // /_\ \
+/_/    \_, / \___/ \___//____//___/
+      /___/
+
+EOF
+CWD=$(pwd -P)
+BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+function render_template() {
+  eval "echo \"$(cat $1)\""
+}
+printf "Make sure you have already prepared the data and initiated\niraf before doing the following.\n"
+printf "The current working directory is $CWD.\n"
+printf "The source directory is $BASEDIR.\n"
+if [ ! -d "./raw" ]; then
+  mkdir ./raw
+  printf "Directory \"raw\" is created.\n"
+else
+  printf "Directory \"raw\" already exists.\n"
+fi
+
+printf "============================================================\n"
+title="Please select one side of the spectrograph."
+prompt="Enter number after the prompt:"
+options=("Blue" "Red")
+
+echo "$title"
+PS3="$prompt "
+select opt in "${options[@]}" "Quit"; do
+
+    case "$REPLY" in
+
+    1 ) printf "============================================================\n"
+    echo "You picked $opt which is option $REPLY."
+    side="Blue"
+    render_template $BASEDIR/config/instrconfig.json.temp > ./myccds.json
+    break;;
+    2 ) printf "============================================================\n"
+    echo "You picked $opt which is option $REPLY."
+    side="Red"
+    # read -p "Enter the slit you have used (e.g. slit2.5):" slit
+    # read -p "Enter the Grism you have used (e.g. G3):" Grism
+    render_template $BASEDIR/config/instrconfig.json.temp > ./myccds.json
+    break;;
+    3 ) printf "============================================================\n"
+    echo "You picked $opt which is option $REPLY.";;
+
+    $(( ${#options[@]}+1 )) ) echo "Goodbye!"; break;;
+    *) echo "Invalid option. Try another one.";continue;;
+
+    esac
+
+done
+
+printf "============================================================\n"
+title="Please select the flat field you want to use."
+prompt="Enter number after the prompt:"
+options=("sky" "ist")
+
+echo "$title"
+PS3="$prompt "
+select opt in "${options[@]}" "Quit"; do
+
+    case "$REPLY" in
+
+    1 ) printf "============================================================\n"
+    echo "You picked $opt which is option $REPLY."
+    cp $BASEDIR/iraf_scripts/genlistccds_skyflat.cl $CWD
+    break;;
+    2 ) printf "============================================================\n"
+    echo "You picked $opt which is option $REPLY."
+    cp $BASEDIR/iraf_scripts/genlistccds_istflat.cl $CWD
+    break;;
+    3 ) printf "============================================================\n"
+    echo "You picked $opt which is option $REPLY.";;
+
+    $(( ${#options[@]}+1 )) ) echo "Goodbye!"; break;;
+    *) echo "Invalid option. Try another one.";continue;;
+
+    esac
+
+done
+
+while true; do
+  read -p "Do you want to copy the raw files to ./raw?[y/n]" yn
+  case $yn in
+    [Yy]* ) bash $BASEDIR/src/cpccdsraw.sh; echo "Raw data is backuped and copied to ./raw."; exit;;
+    [Nn]* ) echo "Otherwise you have to do it yourself."; exit;;
+    * ) echo "Please answer y or n.";;
+  esac
+done

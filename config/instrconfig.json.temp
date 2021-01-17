@@ -1,0 +1,7 @@
+{
+    \"mysettings\": {
+        \"side\": \"$side\",
+        \"slit\": \"default\",
+        \"Grism\": \"default\"
+    }
+}
