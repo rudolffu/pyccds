@@ -2,6 +2,9 @@
 import glob
 from pyraf import iraf
 import json
+from sys import argv
+
+objlist = argv[1]
 
 with open('myccds.json') as file:
     settings = json.loads(file.read())
@@ -47,29 +50,6 @@ iraf.apextract.apall.review = True
 iraf.apextract.apall.background = 'fit'
 iraf.apextract.apall.pfit = 'fit2d'
 iraf.apextract.apall.weights = 'variance'
-# iraf.apextract.apall(input='crf//@objall.list', output='acrf//@objall.list')
-iraf.apextract.apall(input='crf_//@objall.list', output='acrf_//@objall.list')
-
-
-print('Extracting lamp spectrum...')
-iraf.apextract.apall.unlearn()
-iraf.apextract.apall.readnoise = 'ron'
-iraf.apextract.apall.gain = 'gain'
-iraf.apextract.apall.format = 'onedspec'
-iraf.apextract.apall.reference = 'crf_//@objall.list'
-iraf.apextract.apall.interac = False
-iraf.apextract.apall.find = False
-iraf.apextract.apall.recente = False
-iraf.apextract.apall.resize = False
-iraf.apextract.apall.edit = False
-iraf.apextract.apall.trace = False
-iraf.apextract.apall.fittrac = False
-iraf.apextract.apall.extract = True
-iraf.apextract.apall.extras = False
-iraf.apextract.apall.review = True
-iraf.apextract.apall.background = 'none'
-iraf.apextract.apall.pfit = 'fit1d'
-iraf.apextract.apall.weights = 'none'
-iraf.apextract.apall(input='f_//@lampall.list', output='af_//@lampall.list')
+iraf.apextract.apall(input='crf_//@'+objlist, output='acrf_//@'+objlist)
 
 print('--- DONE ---')
