@@ -39,5 +39,5 @@ def rmcrimg(obj):
     print(obj + ' finished.')
 
 
-pool = mp.Pool(mp.cpu_count())
+pool = mp.Pool(1)
 pool.map(rmcrimg, objall)
