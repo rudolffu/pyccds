@@ -21,11 +21,11 @@ conda install -n iraf27 pandas
 Note that every time you want to use IRAF/PyRAF and PyCCDS, you need to activate the env 'iraf27' that you have created:
 
 ```Bash
-source activate iraf27
+conda activate iraf27
 ```
 And to deactivate, run:  
 ```Bash
-source deactivate
+conda deactivate
 ```
 
 ### 1.3. Download PyCCDS and set environment variable for it.
@@ -55,6 +55,8 @@ Select `xgterm` when the terminal prompts. Then run `pyccds_init` from `iraf27` 
 ```
 pyccds_init
 ```
+Select the red side if the center wavelength is 5460 AA. Select istflat for the flat field (in most cases we use the instrument flat).
+
 
 #### 2.1.2 Generate lists of files
 
@@ -68,14 +70,21 @@ flatnall.list ----------- List of 2d images that need zero correction (flat.list
 specall.list ------------ List of all 2d spectra images (objall.list + lampall.list).
 ```
 
-The `pyccds$iraf_scripts` directory contains template `cl` scripts that can be executed in IRAF/PyRAF to generate these lists. Users can modify the scripts for specific cases.  
+The `pyccds$iraf_scripts` directory contains template `cl` scripts that can be executed in IRAF/PyRAF to generate these lists. Users can modify the scripts for specific cases. 
+
+For example, after running `pyccds_init`, a file named `genlistccds_istflat.cl` will appear in the working directory. Open another terminal in the working directory and log in to `PyRAF`/`IRAF`, excute:
+```cl
+cl < genlistccds_istflat.cl
+```
+Then you will get the lists above. Make sure you have checked all the lists before moving on.
+
 
 ### 2.2 Running the pipeline
 You can run `pyccds_run.sh` from `iraf27` env:
 ```
 pyccds_run.sh
 ```
-Alternatively, you can run the scripts step by step, following the order as:
+For beginners, it is recommended to run the scripts step by step, following the order as:
 ```
 makezero2m.py     # Combine zero(bias) frames.
 ccdotz.py         # Do zero(bias), overscan correction and trimming.
