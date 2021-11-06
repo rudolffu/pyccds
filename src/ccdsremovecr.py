@@ -60,5 +60,5 @@ for obj in objall:
 
 if len(stdlist)>0:
     for item in stdlist:
-        shutil.copy(item+'.fits', 
+        shutil.copy('f_'+item+'.fits', 
                     'crf_'+item+'.fits')
