@@ -5,6 +5,10 @@ from astropy.io import fits
 import json
 import sys
 import os
+try: 
+    raw_input = input
+except NameError:
+    pass
 
 basepath = os.path.dirname(sys.argv[0])
 myonedstds = os.path.join(basepath, '../iraf_data/onedstds')

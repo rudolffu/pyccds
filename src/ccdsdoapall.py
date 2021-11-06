@@ -2,6 +2,10 @@
 import glob
 from pyraf import iraf
 import json
+try: 
+    raw_input = input
+except NameError:
+    pass
 
 with open('myccds.json') as file:
     settings = json.loads(file.read())
