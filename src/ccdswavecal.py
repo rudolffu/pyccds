@@ -5,10 +5,12 @@ from astropy.io import fits
 import json
 import sys
 import os
-try: 
+import platform
+from packaging import version
+if version.parse(platform.python_version()) < version.parse("3.0.0"):
+    print("Using raw_input")
+else:
     raw_input = input
-except NameError:
-    pass
 
 basepath = os.path.dirname(sys.argv[0])
 myonedstds = os.path.join(basepath, '../iraf_data/onedstds')

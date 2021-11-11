@@ -8,10 +8,12 @@ import sys
 from shutil import copy2
 import re
 import glob
-try: 
+import platform
+from packaging import version
+if version.parse(platform.python_version()) < version.parse("3.0.0"):
+    print("Using raw_input")
+else:
     raw_input = input
-except NameError:
-    pass
 
 CWD = os.getcwd()
 dbpath = os.path.join(os.path.dirname(sys.argv[0]), '../database')

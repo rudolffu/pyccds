@@ -6,10 +6,12 @@ import sys
 import os
 import json
 import shutil
-try: 
+import platform
+from packaging import version
+if version.parse(platform.python_version()) < version.parse("3.0.0"):
+    print("Using raw_input")
+else:
     raw_input = input
-except NameError:
-    pass
 
 basepath = os.path.dirname(sys.argv[0])
 lacos_im = os.path.join(basepath, '../iraf_tasks/lacos_im.cl')
@@ -38,7 +40,7 @@ iraf.images()
 iraf.images.imutil()
 iraf.images.imutil.imheader(images="f_*fits")
 stdspecs = str(raw_input("Enter filenames of all standard star spectra, \n\
-separated by comma (''): "))
+separated by comma (','): "))
 stdlist = [x.strip('.fits') for x in stdspecs.split(',')]
 stdlist = [x.strip() for x in stdlist]
 for item in stdlist:

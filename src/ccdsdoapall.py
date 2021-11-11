@@ -2,10 +2,12 @@
 import glob
 from pyraf import iraf
 import json
-try: 
+import platform
+from packaging import version
+if version.parse(platform.python_version()) < version.parse("3.0.0"):
+    print("Using raw_input")
+else:
     raw_input = input
-except NameError:
-    pass
 
 with open('myccds.json') as file:
     settings = json.loads(file.read())
