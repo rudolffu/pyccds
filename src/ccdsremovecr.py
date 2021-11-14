@@ -38,9 +38,9 @@ iraf.lacos_im.readn = readnoise
 
 iraf.images()
 iraf.images.imutil()
-iraf.images.imutil.imheader(images="f_*fits")
-stdspecs = str(raw_input("Enter filenames of all standard star spectra, \n\
-separated by comma (','): "))
+iraf.images.imutil.imheader(images="@objall.list")
+stdspecs = raw_input("Enter filenames of all standard star spectra, \n\
+separated by comma (','): ")
 stdlist = [x.strip('.fits') for x in stdspecs.split(',')]
 stdlist = [x.strip() for x in stdlist]
 for item in stdlist:
